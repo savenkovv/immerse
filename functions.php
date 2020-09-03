@@ -44,16 +44,6 @@ function get_role($role)
 }
 
 
-function get_user_name($user)
-{
-	$email = $_SESSION['is_auth'];
-	require 'confDB.php';
-	$sql = "SELECT * FROM users WHERE email=:email";
-	$statement = $pdo->prepare($sql);
-	$statement->execute(['email' => $email]);
-	$user = $statement->fetch(PDO::FETCH_ASSOC);
-	return($user);
-}
 
 
 function is_admin($role)
