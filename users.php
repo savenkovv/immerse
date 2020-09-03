@@ -1,10 +1,12 @@
 <?php
 session_start();
 require "functions.php";
+require "confDB.php";
 if (is_not_auth()) {
 	redirect_to("page_login.php");
 }
 $role = get_role($role);
+
 ?>
 
 <!DOCTYPE html>
@@ -56,7 +58,8 @@ $role = get_role($role);
 <?php
 if (is_admin($role)) {
     show_btn_addUser();
-}               
+}
+
 ?>
                     <div class="border-faded bg-faded p-3 mb-g d-flex mt-3">
                         <input type="text" id="js-filter-contacts" name="filter-contacts" class="form-control shadow-inset-2 form-control-lg" placeholder="Найти пользователя">
@@ -76,6 +79,9 @@ if (is_admin($role)) {
   $users = get_all_users($users);
 ?>
 <?php foreach ($users as $user): ?>
+
+
+
                 <div class="col-xl-4">
                     <div id="c_<?php echo $user["user_id"]; ?>" class="card border shadow-0 mb-g shadow-sm-hover" data-filter-tags="<?php echo $user["data-filter-tags"]; ?>">
                         <div class="card-body border-faded border-top-0 border-left-0 border-right-0 rounded-top">
@@ -83,19 +89,22 @@ if (is_admin($role)) {
                                 <span class="status <?php echo $user["status"]; ?> mr-3">
                                     <span class="rounded-circle profile-image d-block " style="background-image:url('<?php echo $user["img"]; ?>'); background-size: cover;"></span>
                                 </span>
-                                <div class="info-card-text flex-1">
+																<div class="info-card-text flex-1">
+
+
+
+
+
+<?php if ($_SESSION['is_auth'] == $user['id'] || is_admin($role)): ?>
+    
+
+
                                   <a href="javascript:void(0);" class="fs-xl text-truncate text-truncate-lg text-info" data-toggle="dropdown" aria-expanded="false">
                                     <?php echo $user["user_name"]; ?> 
                                     <i class="fal fas fa-cog fa-fw d-inline-block ml-1 fs-md"></i>
                                     <i class="fal fa-angle-down d-inline-block ml-1 fs-md"></i>
                                   </a> 
-<?php
-if (is_admin($role)): ?>
-  
-  <?php else: ?>
-                    
-<?php endif; ?>
-                                    
+
 
 
                                     <div class="dropdown-menu">
@@ -112,13 +121,14 @@ if (is_admin($role)): ?>
                                             <i class="fa fa-camera"></i>
                                         Загрузить аватар
                                         </a>
-                                        <a href="#" class="dropdown-item" onclick="return confirm('are you sure?');">
+                                        <a href="delete.php?id=<?php echo $user['id']; ?>" class="dropdown-item" onclick="return confirm('are you sure?');">
                                             <i class="fa fa-window-close"></i>
                                             Удалить
                                         </a>
                                     </div>
 
-                                    
+<?php endif ?>
+
                                     <span class="text-truncate text-truncate-xl"><?php echo $user["user_post"]; ?></span>
                                 </div>
                                 <button class="js-expand-btn btn btn-sm btn-default d-none" data-toggle="collapse" data-target="#c_<?php echo $user["user_id"]; ?>> .card-body + .card-body" aria-expanded="false">
@@ -204,3 +214,4 @@ if (is_admin($role)): ?>
 
     </script>
 </html>
+

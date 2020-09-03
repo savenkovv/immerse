@@ -11,7 +11,7 @@ if (!empty($user)) {
   redirect_to('page_register.php');
   exit;
 }
-else{
+if (empty($user)) {
 add_user($email, $password);
 set_flash_message("success", "Войдите со своим email и паролем");
 redirect_to('page_login.php');

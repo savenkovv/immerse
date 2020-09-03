@@ -3,6 +3,10 @@ session_start();
 
 
 
+
+
+
+
 function login($email, $password)
 {
 	$user = get_user_by_email($email);
@@ -10,7 +14,7 @@ function login($email, $password)
 	{
 	  if (password_verify($password, $user['password']))
 		{
-			$_SESSION['is_auth'] = $email;
+			$_SESSION['is_auth'] = $user['id'];
 			return true;
 		}
 	}
@@ -30,11 +34,11 @@ function is_not_auth(){
 
 function get_role($role)
 {
-	$email = $_SESSION['is_auth'];
+	$id = $_SESSION['is_auth'];
 	require 'confDB.php';
-	$sql = "SELECT * FROM users WHERE email=:email";
+	$sql = "SELECT * FROM users WHERE id=:id";
 	$statement = $pdo->prepare($sql);
-	$statement->execute(['email' => $email]);
+	$statement->execute(['id' => $id]);
 	$role = $statement->fetch(PDO::FETCH_ASSOC);
 	return($role);
 }
@@ -63,10 +67,15 @@ function is_admin($role)
 }
 
 
+
+
+
+
 function show_btn_addUser()
 {
 	echo "<a class=\"btn btn-success\" href=\"create_user.html\">Добавить</a>";
 }
+
 
 
 function get_all_users($users)
